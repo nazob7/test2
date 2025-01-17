@@ -87,3 +87,16 @@ async def check_language(message: types.Message):
     keyboard = types.ReplyKeyboardMarkup(keyboard=btn, resize_keyboard=True)
 
     await message.answer(f'{lang.phone_text}', reply_markup=keyboard)
+
+async def check_phone(message: types.Message):
+    user_id = message.from_user.id
+    lang = user_data[user_id]['lang']
+    lang = importlib.import_module(f'lang.{lang}')
+    if message.contact is not None:
+        phone = message.contact.phone_number
+    else:
+        phone = message.text
+    user_data[user_id]['phone'] = phone
+    verification_code = randint(100000, 999999)
+    user_data[user_id]['ver_code'] = verification_code
+    await message.answer(f'{lang.ver_text} {verification_code}')

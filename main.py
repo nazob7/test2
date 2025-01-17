@@ -20,6 +20,34 @@ async def handle_message(message: types.Message):
     user_id = message.from_user.id
     if message.text == '/start':
         await welcome(message)
+    elif 'lang' not in user_data[user_id]:
+        await check_language(message)
+    elif 'phone' not in user_data[user_id]:
+        await check_phone(message)
+    elif 'status' not in user_data[user_id]:
+        await check_code(message)
+    elif 'categories' in user_data[user_id]['state']:
+        await show_menu(message)
+    elif 'delivery' in user_data[user_id]['state']:
+        await pickup(message)
+    elif 'pickup' in user_data[user_id]['state']:
+        await show_categories(message)
+    elif 'items' in user_data[user_id]['state']:
+        await show_items(message)
+    elif 'item' in user_data[user_id]['state']:
+        await preview_item(message)
+    elif 'preview' in user_data[user_id]['state']:
+        await basket_m(message)
+    elif 'settings' in user_data[user_id]['state']:
+        await edit_phone(message)
+    elif 'edit_phone' in user_data[user_id]['state']:
+        await phone_ver(message)
+    elif 'edit_phone_ver' in user_data[user_id]['state']:
+        await check_v_phone(message)
+    elif 'fdb' in user_data[user_id]['state']:
+        await save_fdb(message)
+    elif 'cart' in user_data[user_id]['state']:
+        await cart_order(message)
 
 
 async def welcome(message: types.Message):
@@ -35,3 +63,27 @@ async def welcome(message: types.Message):
     keyboard = types.ReplyKeyboardMarkup(keyboard=button, resize_keyboard=True)
 
     await message.answer('Добро пожаловать в наш бот!\nВыберите язык', reply_markup=keyboard)
+
+
+def select_language(lang):
+    if lang == 'Русский 🇷🇺':
+        return 'ru'
+    elif lang == 'English 🇬🇧':
+        return 'en'
+    elif lang == 'Uzbekcha 🇺🇿':
+        return 'uz'
+
+
+async def check_language(message: types.Message):
+    user_id = message.from_user.id
+    lang = message.text
+    lang = select_language(lang)
+    user_data[user_id]['lang'] = lang
+    lang = importlib.import_module(f'lang.{lang}')
+    btn = [[
+        types.KeyboardButton(text=lang.phone_button, request_contact=True)
+    ]]
+
+    keyboard = types.ReplyKeyboardMarkup(keyboard=btn, resize_keyboard=True)
+
+    await message.answer(f'{lang.phone_text}', reply_markup=keyboard)

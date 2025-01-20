@@ -14,6 +14,11 @@ user_data = {}
 project_dir = os.path.dirname(os.path.abspath(__file__))
 image_dir = os.path.join(project_dir, 'images')  # путь к картинкам
 
+print('hello world')
+print('hello world')
+print('hello world')
+print('hello world')
+print('hello world')
 
 @dp.message()
 async def handle_message(message: types.Message):

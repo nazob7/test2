@@ -19,6 +19,7 @@ print('hello world')
 print('hello world')
 print('hello world')
 print('hello world')
+print('hello world')
 
 @dp.message()
 async def handle_message(message: types.Message):

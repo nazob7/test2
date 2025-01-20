@@ -20,6 +20,7 @@ print('hello world')
 print('hello world')
 print('hello world')
 print('hello world')
+print('goodbye world')
 
 @dp.message()
 async def handle_message(message: types.Message):
